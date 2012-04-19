@@ -36,6 +36,12 @@ class AmazonPAS extends CFRuntime
 	 */
 	var $locale;
 
+	/**
+	 * Property: assoc_id
+	 * The amazon partner associate ID (used to retrieve referral bonus).
+	 */
+	var $assoc_id;
+
 
 	/*%******************************************************************************************%*/
 	// CONSTANTS
@@ -87,34 +93,32 @@ class AmazonPAS extends CFRuntime
 	 * Access:
 	 * 	public
 	 *
-	 * Parameters:
-	 * 	$key - _string_ (Optional) Your Amazon API Key. If blank, it will look for the <AWS_KEY> constant.
-	 * 	$secret_key - _string_ (Optional) Your Amazon API Secret Key. If blank, it will look for the <AWS_SECRET_KEY> constant.
-	 * 	$assoc_id - _string_ (Optional) Your Amazon Associates ID. If blank, it will look for the <AWS_ASSOC_ID> constant.
+	 * @param array $options (Optional)
 	 *
-	 * Returns:
-	 * 	_boolean_ false if no valid values are set, otherwise true.
+	 * @return void
 	 */
-	public function __construct($key = null, $secret_key = null, $assoc_id = null)
+	public function __construct($options)
 	{
-		$this->api_version = '2010-06-01';
+		$this->api_version = '2010-06-01'; // @TODO: change it.
 
-		if (!$key && !defined('AWS_KEY'))
+		if (empty($options['key']))
 		{
 			throw new PAS_Exception('No account key was passed into the constructor, nor was it set in the AWS_KEY constant.');
 		}
 
-		if (!$secret_key && !defined('AWS_SECRET_KEY'))
+		if (empty($options['secret']))
 		{
 			throw new PAS_Exception('No account secret was passed into the constructor, nor was it set in the AWS_SECRET_KEY constant.');
 		}
 
-		if (!$assoc_id && !defined('AWS_ASSOC_ID'))
+		if (empty($options['assoc_id']))
 		{
 			throw new PAS_Exception('No Amazon Associates ID was passed into the constructor, nor was it set in the AWS_ASSOC_ID constant.');
 		}
 
-		return parent::__construct($key, $secret_key, null, $assoc_id);
+		$this->assoc_id = $options['assoc_id'];
+
+		return parent::__construct($options);
 	}
 
 
